@@ -2,10 +2,10 @@ from PIL    import Image
 from urllib import request
 from bs4    import BeautifulSoup
 from ctypes import *
+import io
 
 # Paths to transit files
-jpg_path = 'C:\\Users\\Roman\\Documents\\GitHub\\WallpaperRefresher\\wp.jpg'
-bmp_path = 'C:\\Users\\Roman\\Documents\\GitHub\\WallpaperRefresher\\wp.bmp'
+imgpath = 'C:\\Users\\Roman\\Documents\\GitHub\\WallpaperRefresher\\wp.bmp'
 
 def setwp(img):
     ''' (string)
@@ -19,16 +19,19 @@ def setwp(img):
     windll.user32.SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE)
     print(' + Wallpaper SET!')
 
-def jpg2bmp(jpg,bmp):
-    ''' (string,string)
-    Convert's jpg file to a bmp.
-    '''
-    print(' > Converting to bmp...')
-    p = Image.open(jpg)
-    p.save(bmp)
-    print(' + Converted JPG to BMP')
+def linkcut(s):
+    if s[1]=='i':
+        begin = s.find('wallp')
+        end = s.find('jpg')+3
+        link = s[begin:end]
+    elif s[1]=='d':
+        begin = s.find('wallp')
+        end = s.find('target',begin)-2
+        link = s[begin:end]
+    result = 'http://thepaperwall.com/' + link
+    return result
 
-def getWOTD(outjpg):
+def getWOTD(img):
     ''' (string)
     Finds and downloads Wallpaper of the Day at paperwall.com for further use.
     '''
@@ -36,20 +39,17 @@ def getWOTD(outjpg):
     page = request.urlopen('http://thepaperwall.com/index.php')
     soup = BeautifulSoup(page)
     block = str(soup.find('div',class_='active'))
-    key = block[67:-200]
-    link = 'http://thepaperwall.com/' + key
-    print('Link to WOTD PAGE obtained: ' + link)
+    link = linkcut(block)
 
     page = request.urlopen(link)
     soup = BeautifulSoup(page)
     block = str(soup.find('img',class_='wall_img'))
-    key = block[45:-3]
-    link = 'http://thepaperwall.com' + key
-    print('\nLink to WOTD JPG obtained: ' + link)
+    link = linkcut(block)
 
     picture = request.urlopen(link)
+    print(' > Saving image...')
     CHUNK = 16 * 1024
-    with open(outjpg,'wb') as f:
+    with open(img,'wb') as f:
         while True:
             chunk = picture.read(CHUNK)
             if not chunk: break
@@ -57,7 +57,6 @@ def getWOTD(outjpg):
     print(' + Image obtained')
 
 # Main body
-getWOTD(jpg_path)
-jpg2bmp(jpg_path,bmp_path)
-setwp(bmp_path)
+getWOTD(imgpath)
+setwp(imgpath)
 print('\n=== We are done here ===')

@@ -13,15 +13,21 @@ every now and then.
 0.1:
    - Story starts from ability to set desktop wallpaper from predefined bmp file.
 
+0.2:
+   - Added converter from jpeg to bmp (Windows needs specifically bmp).
+   - Added ability to download Wallpaper of the Day from thepaperwall.com.
+
 0.3:
-   - Added converter from jpeg to bmp (Windows needs specifically bmp)
-   - Added ability to download Wallpaper of the Day from thepaperwall.com
+   - Fixed link recognition.
+   - Removed jpg2bmp coversion, downloading directly to bmp file now.
 
 =================================================================================
 
 TODO:
 
-   - Get rid of transit file/files
+   + Get rid of transit file/files
+   - Make program paths more flexible
+   - Check necessity to update downloaded wallpaper
    - Give other types of wallpapers (categories, tags, etc.)
    - Make it usable at Windows startup (checks, error handling, etc.)
    - Add interface
