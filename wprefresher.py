@@ -1,11 +1,24 @@
-from PIL    import Image
 from urllib import request
 from bs4    import BeautifulSoup
 from ctypes import *
-import io
+import os,time
 
-# Paths to transit files
-imgpath = 'C:\\Users\\Roman\\Documents\\GitHub\\WallpaperRefresher\\wp.bmp'
+img = 'wp.bmp'
+imgpath = os.path.abspath(img)
+
+def needwp(img):
+    modified = time.ctime(os.stat(img).st_mtime)
+    modified = modified.split()
+    modified = modified[2]
+    print('Wp modified: '+modified)
+    today = time.strftime('%d')
+    if modified!=today:
+        print('Wallpaper needs update!')
+        return True
+    else:
+        print('Wallpaper is up to date.')
+        return False
+    
 
 def setwp(img):
     ''' (string)
@@ -19,7 +32,10 @@ def setwp(img):
     windll.user32.SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, path, SPIF_UPDATEINIFILE)
     print(' + Wallpaper SET!')
 
-def linkcut(s):
+def getLink(s):
+    ''' (string) -> string
+    Cuts necessary link from part of the html page.
+    '''
     if s[1]=='i':
         begin = s.find('wallp')
         end = s.find('jpg')+3
@@ -39,12 +55,12 @@ def getWOTD(img):
     page = request.urlopen('http://thepaperwall.com/index.php')
     soup = BeautifulSoup(page)
     block = str(soup.find('div',class_='active'))
-    link = linkcut(block)
+    link = getLink(block)
 
     page = request.urlopen(link)
     soup = BeautifulSoup(page)
     block = str(soup.find('img',class_='wall_img'))
-    link = linkcut(block)
+    link = getLink(block)
 
     picture = request.urlopen(link)
     print(' > Saving image...')
@@ -57,6 +73,8 @@ def getWOTD(img):
     print(' + Image obtained')
 
 # Main body
-getWOTD(imgpath)
-setwp(imgpath)
+if needwp(imgpath):
+    getWOTD(imgpath)
+    setwp(imgpath)
+
 print('\n=== We are done here ===')

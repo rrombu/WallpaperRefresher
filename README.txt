@@ -21,13 +21,18 @@ every now and then.
    - Fixed link recognition.
    - Removed jpg2bmp coversion, downloading directly to bmp file now.
 
+0.4:
+   - Made program paths flexible for using from any place 
+	(now executable can be made)
+   - Added checking if wallpaper is up to date
+
 =================================================================================
 
 TODO:
 
    + Get rid of transit file/files
-   - Make program paths more flexible
-   - Check necessity to update downloaded wallpaper
+   + Make program paths flexible
+   + Check necessity to update downloaded wallpaper
    - Give other types of wallpapers (categories, tags, etc.)
    - Make it usable at Windows startup (checks, error handling, etc.)
    - Add interface
