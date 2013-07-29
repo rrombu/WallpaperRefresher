@@ -26,6 +26,13 @@ every now and then.
 	(now executable can be made)
    - Added checking if wallpaper is up to date
 
+0.5:
+   - Added png wallpaper support
+   - Added mode for searching wallpapers by provided tag 
+	- offering a bunch of images to choose from
+	- skips images with resolution lower than your monitor
+   - Added launch arguments for different modes
+
 =================================================================================
 
 TODO:
@@ -33,8 +40,10 @@ TODO:
    + Get rid of transit file/files
    + Make program paths flexible
    + Check necessity to update downloaded wallpaper
-   - Give other types of wallpapers (categories, tags, etc.)
-   - Make it usable at Windows startup (checks, error handling, etc.)
+   + Give other types of wallpapers (categories, tags, etc.)
+   + Make it usable at Windows startup (checks, error handling, etc.)
+   - Add screen resolution check
+   + Add support for multiple wallpapers, not just first one found on page
    - Add interface
    - Give other wallpaper sources
    - Try to add Windows 8 Lock Screen / Windows 8.1 Start menu background support
