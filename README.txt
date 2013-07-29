@@ -33,6 +33,11 @@ every now and then.
 	- skips images with resolution lower than your monitor
    - Added launch arguments for different modes
 
+0.5b:
+   - Added multiple word tag support
+   - Errors for end of found images or finding none are now handled properly
+   - Revamped structure before integrating different sources
+
 =================================================================================
 
 TODO:
@@ -42,7 +47,7 @@ TODO:
    + Check necessity to update downloaded wallpaper
    + Give other types of wallpapers (categories, tags, etc.)
    + Make it usable at Windows startup (checks, error handling, etc.)
-   - Add screen resolution check
+   + Add screen resolution check
    + Add support for multiple wallpapers, not just first one found on page
    - Add interface
    - Give other wallpaper sources
