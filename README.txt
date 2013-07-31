@@ -38,6 +38,10 @@ every now and then.
    - Errors for end of found images or finding none are now handled properly
    - Revamped structure before integrating different sources
 
+0.6:
+   - Added Wallbase.cc support
+   - Changed arguments for executable: [source] [mode] [tag text]
+
 =================================================================================
 
 TODO:
@@ -50,6 +54,6 @@ TODO:
    + Add screen resolution check
    + Add support for multiple wallpapers, not just first one found on page
    - Add interface
-   - Give other wallpaper sources
+   + Give other wallpaper sources
    - Try to add Windows 8 Lock Screen / Windows 8.1 Start menu background support
 
