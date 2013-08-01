@@ -1,23 +1,6 @@
 from urllib  import request
 from bs4     import BeautifulSoup
-from ctypes  import *
 from general import *
-import os,time,sys
-
-def needwp(img):
-    ''' (string) -> boolean
-    Checks if wallpaper image needs update by watching date of bmp modification
-    '''
-    modified = time.ctime(os.stat(img).st_mtime)
-    modified = modified.split()
-    modified = modified[2]
-    print(' > | Wp modified: '+modified)
-    today = time.strftime('%d')
-    if modified!=today:
-        print(' ! | Wallpaper needs update!')
-        getWOTD()
-    else:
-        print(' + | Wallpaper is up to date.')
 
 def getLink(s):
     ''' (string) -> string
@@ -49,6 +32,7 @@ def getWOTD():
     block = str(soup.find('img',class_='wall_img'))
     link = getLink(block)
     getImage(link)
+    setwp(imgpath)
 
 def getTagged(tag):
     ''' (string)

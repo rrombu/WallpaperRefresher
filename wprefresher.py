@@ -1,7 +1,5 @@
-from urllib  import request
-from ctypes  import *
 from general import *
-import os,time,sys,paperwall,wallbase
+import sys,paperwall,wallbase
 
 img = 'wp.bmp'
 
@@ -17,8 +15,8 @@ def main():
     if request == '-h':
         print('\nArguments: [-SOURCE: wp, pw] [-MODE: wotd, tag [your query]]')
     elif request == '-wotd':
-        if source == '-pw': paperwall.needwp(imgpath)
-        elif source == '-wb': wallbase.needwp(imgpath)
+        if (source == '-pw') and (needwp(imgpath)): paperwall.getWOTD()
+        elif (source == '-wb') and (needwp(imgpath)): wallbase.getWOTD()
     elif request == '-tag':
         if source == '-pw': paperwall.getTagged(tag)
         elif source == '-wb': wallbase.getTagged(tag)

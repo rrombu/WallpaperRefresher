@@ -42,6 +42,9 @@ every now and then.
    - Added Wallbase.cc support
    - Changed arguments for executable: [source] [mode] [tag text]
 
+0.6b:
+   - Minor structure improvements
+
 =================================================================================
 
 TODO:

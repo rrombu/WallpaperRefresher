@@ -1,6 +1,6 @@
 from urllib import request
 from ctypes import *
-import os,sys
+import os,time
 
 width = windll.user32.GetSystemMetrics(0)
 height = windll.user32.GetSystemMetrics(1)
@@ -31,4 +31,20 @@ def getImage(url):
             chunk = picture.read(CHUNK)
             if not chunk: break
             f.write(chunk)
-    print(' + | Image obtained') 
+    print(' + | Image obtained')
+
+def needwp(img):
+    ''' (string) -> boolean
+    Checks if wallpaper image needs update by watching date of bmp modification
+    '''
+    modified = time.ctime(os.stat(img).st_mtime)
+    modified = modified.split()
+    modified = modified[2]
+    print(' > | Wp modified: '+modified)
+    today = time.strftime('%d')
+    if modified!=today:
+        print(' ! | Wallpaper needs update!')
+        return True
+    else:
+        print(' + | Wallpaper is up to date.')
+        return False
