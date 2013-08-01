@@ -24,7 +24,7 @@ def getWOTD():
     ''' 
     Finds and downloads Wallpaper of the Day at paperwall.com for further use.
     '''
-    print(' > | Getting you Wallpaper of the day...')
+    print(' > | Getting you Wallpaper of the day from Wallnase...')
     page = request.urlopen('http://wallbase.cc/toplist/0/12/gteq/'+str(width)+'x'+str(height)+'/0/100/32/1d')
     soup = BeautifulSoup(page)
     block = str(soup.find('div',class_='thumb'))
