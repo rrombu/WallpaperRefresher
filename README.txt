@@ -45,6 +45,9 @@ every now and then.
 0.6b:
    - Minor structure improvements
 
+0.6c:
+   - Fix for necessity check (for dates <10)
+
 =================================================================================
 
 TODO:
