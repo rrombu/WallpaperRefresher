@@ -11,7 +11,7 @@ class UI(QtGui.QWidget):
         QtGui.QWidget.__init__(self,*args)
         self.setWindowTitle(u"WR")
         # создаем объекты:
-        button = QtGui.QPushButton("Wallpaper of the Day")
+        button = QtGui.QPushButton("BRING IT ON!")
 
         srcbox = QtGui.QComboBox()
         srcbox.addItem(u"Выберите источник")
@@ -61,8 +61,7 @@ class UI(QtGui.QWidget):
                 paperwall.getWOTD()
             elif mode == 'tag': paperwall.getTagged(request)
 
-if __name__=="__main__":
-    app = QtGui.QApplication(sys.argv)
-    window = UI()
-    window.show()
-    sys.exit(app.exec_())
+app = QtGui.QApplication(sys.argv)
+window = UI()
+window.show()
+sys.exit(app.exec_())
