@@ -79,5 +79,6 @@ def getTagged(tag):
         link = getLink(block[33:])
         getImage(link)
         setwp(imgpath)
+        break
         if input(' ? | You happy now? (y/n) ')=='y': break
         else: n+=1

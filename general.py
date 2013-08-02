@@ -39,9 +39,10 @@ def needwp(img):
     '''
     modified = time.ctime(os.stat(img).st_mtime)
     modified = modified.split()
-    modified = modified[2]
-    print(' > | Wp modified: '+modified)
-    today = time.strftime('%d')
+    modified = int(modified[2])
+    print(' > | Wp modified: ',modified)
+    today = int(time.strftime('%d'))
+    print('And today is:',today)
     if modified!=today:
         print(' ! | Wallpaper needs update!')
         return True
