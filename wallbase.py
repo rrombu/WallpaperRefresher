@@ -2,6 +2,7 @@ from urllib  import request
 from urllib  import parse
 from bs4     import BeautifulSoup
 from general import *
+from PyQt4   import QtGui
 import base64
 
 def getLink(s):
@@ -79,6 +80,7 @@ def getTagged(tag):
         link = getLink(block[33:])
         getImage(link)
         setwp(imgpath)
-        break
-        if input(' ? | You happy now? (y/n) ')=='y': break
+        happiness = QtGui.QMessageBox.question(None, 'Let me ask', 'Are you happy now?', QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+        if happiness == QtGui.QMessageBox.Yes:
+            break
         else: n+=1

@@ -10,18 +10,18 @@ class UI(QtGui.QWidget):
     def __init__(self,*args):
         QtGui.QWidget.__init__(self,*args)
         self.setWindowTitle(u"WR")
-        # создаем объекты:
+
         button = QtGui.QPushButton("BRING IT ON!")
 
         srcbox = QtGui.QComboBox()
-        srcbox.addItem(u"Выберите источник")
+        srcbox.addItem(u"Choose source")
         srcbox.addItem("Wallbase")
         srcbox.addItem("Paperwall")
 
-        request = QtGui.QGroupBox(u"Выбор режима") # Рамка с надписью вокруг группы элементов.
-        request_lay = QtGui.QVBoxLayout(request)    # Менеджер размещения элементов в рамке.
-        request1 = QtGui.QRadioButton(u"Обои дня", request)
-        request2 = QtGui.QRadioButton(u"Поиск запроса", request)
+        request = QtGui.QGroupBox(u"Choose mode")
+        request_lay = QtGui.QVBoxLayout(request)
+        request1 = QtGui.QRadioButton(u"Get me most precious one today!", request)
+        request2 = QtGui.QRadioButton(u"I don't like to live dangerously.\nFind me on of these...", request)
         request1.setChecked(True)
         request_lay.addWidget(request1)
         request_lay.addWidget(request2)
@@ -49,7 +49,7 @@ class UI(QtGui.QWidget):
         global mode
         if t: mode = 'wotd'
         else: mode = 'tag'
-        print('Request changed to',request)
+        print('Request changed to',mode)
     def run(self):
         request = self.search.text()
         if source == 'wallbase':

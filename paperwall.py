@@ -1,6 +1,7 @@
 from urllib  import request
 from bs4     import BeautifulSoup
 from general import *
+from PyQt4   import QtGui
 
 def getLink(s):
     ''' (string) -> string
@@ -40,7 +41,7 @@ def getTagged(tag):
     '''    
     print(' > | You are looking for wallpaper tagged: '+tag)
     tag = tag.replace(' ','+')
-    tag = tag[:len(tag)-1]
+    tag = tag[:len(tag)]
     page = request.urlopen('http://thepaperwall.com/search.php?search='+tag)
     soup = BeautifulSoup(page)
     group = soup.find_all('div',class_='single_thumbnail_cont')
@@ -74,6 +75,7 @@ def getTagged(tag):
         link = getLink(block)
         getImage(link)
         setwp(imgpath)
-        break
-        if input(' ? | You happy now? (y/n) ')=='y': break
+        happiness = QtGui.QMessageBox.question(None, 'Let me ask', 'Are you happy now?', QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+        if happiness == QtGui.QMessageBox.Yes:
+            break
         else: n+=1
