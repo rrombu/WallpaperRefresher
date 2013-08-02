@@ -21,7 +21,7 @@ def getWOTD():
     ''' 
     Finds and downloads Wallpaper of the Day at paperwall.com for further use.
     '''
-    print(' > | Getting you Wallpaper of the day...')
+    print(' > | Getting you Wallpaper of the day from Paperwall...')
     page = request.urlopen('http://thepaperwall.com/index.php')
     soup = BeautifulSoup(page)
     block = str(soup.find('div',class_='active'))
@@ -74,5 +74,6 @@ def getTagged(tag):
         link = getLink(block)
         getImage(link)
         setwp(imgpath)
+        break
         if input(' ? | You happy now? (y/n) ')=='y': break
         else: n+=1
