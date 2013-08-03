@@ -44,12 +44,10 @@ class UI(QtGui.QWidget):
         global source
         if i == 1: source = 'wallbase'
         elif i == 2: source = 'paperwall'
-        print('Source changed to',source)
     def change_mode(self,t):
         global mode
         if t: mode = 'wotd'
         else: mode = 'tag'
-        print('Request changed to',mode)
     def run(self):
         request = self.search.text()
         if source == 'wallbase':
