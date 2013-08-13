@@ -45,15 +45,15 @@ def getTagged(tag):
     print(' > | You are looking for wallpaper tagged:',tag)
     params = {
       'query' : tag,
-      'board' : 213,    # ???
+      'board' : 213,    # 2 for Wallpapers/General, 1 for Anime/Manga and 3 for High Resolution Images
       'nsfw' : 100,     # Bit-mask: sfw-sketchy-nsfw
       'res' : str(width)+'x'+str(height), # Resolution
       'res_opt' : 'qteq',   # qteq - "at least" resolution
       'aspect' : 0,     
       'orderby' : 'random', # Change to 'random' if not testing
       'orderby_opt' : 'desc',
-      'thpp' : 60,      # ???
-      'section' : 'wallpapers' # ???
+      'thpp' : 60,      # Number of wallpapers displayed on the page
+      'section' : 'wallpapers' # Also available User collections
     }
     params = parse.urlencode(params)
     params = params.encode('utf-8')
