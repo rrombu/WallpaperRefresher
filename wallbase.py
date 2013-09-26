@@ -1,29 +1,29 @@
 from urllib  import request
-from urllib  import parse
 from bs4     import BeautifulSoup
 from general import *
 from PyQt4   import QtGui, QtCore
-import base64
 QString = type("")
 
 def getLink(s):
     ''' (string) -> string
     Cuts necessary link from part of the html page.
     '''
-    result = 'None'
-    if s[1]=='s':
-        begin = s.find('+B')+4
-        end = s.find(')+')-1
-        result = str(base64.b64decode(s[begin:end]),encoding='UTF-8')
+    if s[1]=='i':
+        begin = s.find('src')+5
+        end = s.find('">')
+        return s[begin:end]
+    elif s[1]=='a':
+        begin = s.find('http')
+        end = s.find('"',begin)
+        return s[begin:end]
     elif s[1]=='d':
         begin = s.find('id="thumb')+9
         end = s.find('" ',begin)
-        link = s[begin:end]
-        result = 'http://wallbase.cc/wallpaper/' + link
-    return result
+        result = 'http://wallbase.cc/wallpaper/' + s[begin:end]
+        return result
 
 def getWOTD():
-    ''' 
+    '''
     Finds and downloads Wallpaper of the Day at paperwall.com for further use.
     '''
     progress = QtGui.QProgressDialog(None, None, 0, 100)
@@ -31,32 +31,39 @@ def getWOTD():
     progress.setMinimum(0)
     progress.setMaximum(100)
     progress.setMinimumDuration(0)
-    progress.setWindowTitle('Let me see...')
+    progress.setWindowTitle('Progress')
     progress.setLabelText('Connecting to wallbase.cc ...')
     progress.setValue(0)    # Some crazy hack
     progress.setValue(1)    # because Progress Dialog
     progress.setValue(0)    # awakes only on third value change :(
 
-    page = request.urlopen('http://wallbase.cc/toplist/0/12/gteq/'+str(width)+'x'+str(height)+'/0/100/32/1d')
+    page = request.urlopen('http://wallbase.cc')
     progress.setValue(10)
     soup = BeautifulSoup(page)
-    block = str(soup.find('div',class_='thumb'))
-    link = getLink(block)
+    soup = soup.find_all('a',title='Featured wallpaper')
     progress.setValue(25)
-
-    progress.setLabelText('Opening wallpaper page...')
-    page = request.urlopen(link)
-    progress.setValue(35)
-    soup = BeautifulSoup(page)
-    soup = soup.find_all('div',class_='right')
-    block = str(soup[len(soup)-1])
-    link = getLink(block[33:])
-    progress.setLabelText('Downloading image...')
-    progress.setValue(50)
-    getImage(link)
-    progress.setLabelText('Setting up wallpaper...')
-    progress.setValue(90)
-    setwp(imgpath)
+    i = 0
+    for wallpaper in soup:
+        progress.setLabelText('Opening wallpaper page...')
+        linkend = str(wallpaper).find('"',24)
+        page = request.urlopen(str(wallpaper)[23:linkend])
+        soup = BeautifulSoup(page)
+        progress.setValue(35)
+        block = str(soup.find('img',class_='wall stage1 wide'))
+        link = getLink(block)
+        progress.setLabelText('Downloading image...')
+        progress.setValue(50)
+        getImage(link)
+        progress.setLabelText('Setting up wallpaper...')
+        progress.setValue(90)
+        setwp(imgpath)
+        happiness = QtGui.QMessageBox.question(None, 'Request', 'Do you like your new wallpaper?', QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+        i += 1
+        if happiness == QtGui.QMessageBox.Yes:
+            break
+        elif i == 27:
+            QtGui.QMessageBox.critical(None, 'Warning', 'There is no more stuff', QtGui.QMessageBox.Ok)
+            break
 
 def getTagged(tag):
     ''' (string)
@@ -67,30 +74,21 @@ def getTagged(tag):
     progress.setMinimum(0)
     progress.setMaximum(100)
     progress.setMinimumDuration(0)
-    progress.setWindowTitle('Let me see...')
+    progress.setWindowTitle('Progress')
     progress.setLabelText('Connecting to wallbase.cc ...')
     progress.setValue(0)    # Some crazy hack
     progress.setValue(1)    # because Progress Dialog
     progress.setValue(0)    # awakes only on third value change :(
-    params = {
-      'query' : tag,
-      'board' : 213,    # ???
-      'nsfw' : 100,     # Bit-mask: sfw-sketchy-nsfw
-      'res' : str(width)+'x'+str(height), # Resolution
-      'res_opt' : 'qteq',   # qteq - "at least" resolution
-      'aspect' : 0,     
-      'orderby' : 'random', # Change to 'random' if not testing
-      'orderby_opt' : 'desc',
-      'thpp' : 60,      # ???
-      'section' : 'wallpapers' # ???
-    }
-    params = parse.urlencode(params)
-    params = params.encode('utf-8')
-    page = request.urlopen('http://wallbase.cc/search',params)
+    tag2 = tag.replace(' ','%20')
+    page = request.urlopen('http://wallbase.cc/search?color=&section=wallpapers&q='+tag2+'&res_opt=gteq&res='+str(width)+'x'+str(height)+'&order_mode=desc&thpp=20&purity=100&board=213&aspect=0.00')
     progress.setValue(25)
     soup = BeautifulSoup(page)
-    progress.setLabelText('Getting you some '+tag)
-    group = soup.find_all('div',class_='thumb')
+    progress.setLabelText('Searching: '+tag)
+    group = soup.find_all('a',target="_blank")
+    for i in range(len(group)-1,len(group)-5,-1):  # Filters social buttons
+        try: group.remove(group[i])
+        except IndexError: break
+
     for s in group:
         group[group.index(s)] = getLink(str(s))
 
@@ -100,19 +98,21 @@ def getTagged(tag):
         try: page = request.urlopen(group[n])
         except IndexError:
             if n>0:
-                QtGui.QMessageBox.critical(None, "I'm so sorry!", 'I got nothing more :(', QtGui.QMessageBox.Ok)
+                QtGui.QMessageBox.critical(None, "Warning", 'There is no more stuff', QtGui.QMessageBox.Ok)
                 break
             else:
-                QtGui.QMessageBox.critical(None, "I'm so sorry!", 'I found nothing :(', QtGui.QMessageBox.Ok)
+                QtGui.QMessageBox.critical(None, "Warning", 'Found nothing! Check or change your request.', QtGui.QMessageBox.Ok)
                 break
         soup = BeautifulSoup(page)
-        soup = soup.find_all('div',class_='right')
-        block = str(soup[len(soup)-1])
-        link = getLink(block[33:])
+        block = str(soup.find('img',class_='wall stage1 wide'))
+        link = getLink(block)
+        progress.setLabelText('Downloading image...')
+        progress.setValue(50)
         getImage(link)
+        progress.setLabelText('Setting up wallpaper...')
         progress.setValue(90)
         setwp(imgpath)
-        happiness = QtGui.QMessageBox.question(None, 'Let me ask', 'Are you happy now?', QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+        happiness = QtGui.QMessageBox.question(None, 'Request', 'Do you like your new wallpaper?', QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
         if happiness == QtGui.QMessageBox.Yes:
             break
         else: n+=1
